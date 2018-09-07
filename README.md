@@ -23,7 +23,11 @@ It gives you full (what is built in) controll over your music.
  Requests are simple json objects sent in header. 
  
  # How does it do?
- Backend communicates with Spotify API, authenticate with API using SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET as credentials. ID and Secret can be stored in local linux session or server.js file. I am using in file settings, and yes there is example for session storage on linux system. 
+ Backend communicates with Spotify API, authenticate with API using SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET as credentials. ID and Secret can be stored in local linux session or server.js file. I am using in file settings, and yes there is example for session storage on linux system. After starting the server it will tell you to open url in your browser ex. http://yr-domain.com/login 
+It will ask you to approwe connection with app. 
+
+Server gets OAuth access_token and refresh_token. Refresh token is used to get new fresh access_token and server takes care of that for you. There is a cronjob which ping spotify server every 55 minutes and ask for new refreshed token. Once when token is received, it is stored in lacal memory and used in server app. To stop, just terminate nodejs server app. 
+
  # Store settings in Linux terminal
  
     export SPOTIFY_CLIENT_ID=XXXX
