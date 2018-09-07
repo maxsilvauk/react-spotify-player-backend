@@ -30,6 +30,8 @@ It gives you full (what is built in) controll over your music.
     export SPOTIFY_CLIENT_SECRET=YYYY
     
 ID and Secret you get from https://developer.spotify.com/ You have to create new App under Dashboard and click Create Client ID. How to procedure can be found here: https://www.youtube.com/watch?v=f5OLDvwP-Ug 
+Make sure to add callback URLs in spotify app dashboard. Example of url: http://your-domain.com:8888/callback
+It will not work without this. Watch provided video and you will be fine.
     
 # Run server
 
