@@ -26,9 +26,9 @@ let app = express()
 // parse JSON
 app.use(bodyParser.json());
 // CONFIG
-const serverAddr = 'http://node2.reflect.ba';
-var SPOTIFY_CLIENT_ID = '9c70f9f7efbc41e59d8dd35c66d0131b';
-var SPOTIFY_CLIENT_SECRET = 'b037d5f1f31349d58759ff5e27de84f6';
+const serverAddr = 'http://YOUR_DOMAIN';  // no slash at the end!
+var SPOTIFY_CLIENT_ID = 'ENTER_YOUR_ID';
+var SPOTIFY_CLIENT_SECRET = 'ENTER_YOUR_SECRET';
 let access_token = ""; // Keeps valid token in memory
 let refresh_token = ""; // known as permanent token which does not expire 
 let expires_in = 3600;
