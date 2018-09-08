@@ -69,4 +69,5 @@ It will not work without this. Watch provided video and you will be fine.
 
 Fork it, add more features, contribute, report problems, feel free to use it. 
 
-
+# To-do
+Server does not have any middleware and that is something to add in future. Frontend should authenticate before it's request being processed.
