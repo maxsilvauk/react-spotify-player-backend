@@ -42,6 +42,17 @@ It will not work without this. Watch provided video and you will be fine.
     npm install
     npm start
  
+ *Optional* 
+ 
+ Run your server forever without having to login in to terminal and run it. (it runs in background and restart in case or errors)
+ Make sure to install forever first. (for more details and options: https://www.npmjs.com/package/forever )
+ 
+    $ [sudo] npm install forever -g
+    
+ Start server with forever:
+ 
+    forever start -a -l forever.log -o out.log -e err.log server.js 
+    
  You may have to install some libraryes. Here is full dependencies list: 
  
    "body-parser": "^1.18.3",
