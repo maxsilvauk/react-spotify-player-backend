@@ -23,7 +23,8 @@ It gives you full (what is built in) controll over your music.
  Requests are simple json objects sent in header. 
  
  # How does it do?
- Backend communicates with Spotify API, authenticate with API using SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET as credentials. ID and Secret can be stored in local linux session or server.js file. I am using in file settings, and yes there is example for session storage on linux system. After starting the server it will tell you to open url in your browser ex. http://yr-domain.com/login 
+ Backend communicates with Spotify API, authenticate with API using SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET as credentials. ID and Secret can be stored in local linux session or server.js file. I am using in file settings, and yes there is example for session storage on linux system. After starting the server it will tell you to 
+open url in your browser ex. http://yr-domain.com/login 
 It will ask you to approwe connection with app. 
 
 Server gets OAuth access_token and refresh_token. Refresh token is used to get new fresh access_token and server takes care of that for you. There is a cronjob which ping spotify server every 55 minutes and ask for new refreshed token. Once when token is received, it is stored in lacal memory and used in server app. To stop, just terminate nodejs server app. 
@@ -52,16 +53,17 @@ It will not work without this. Watch provided video and you will be fine.
  Start server with forever:
  
     forever start -a -l forever.log -o out.log -e err.log server.js 
-    
+ 
+ # Dependencies  
  You may have to install some libraryes. Here is full dependencies list: 
  
-   "body-parser": "^1.18.3",
-    "cron": "^1.4.1",
-    "express": "^4.15.4",
-    "node-schedule": "^1.3.0",
-    "querystring": "^0.2.0",
-    "request": "^2.81.0"
-    
+     "body-parser": "^1.18.3",
+     "cron": "^1.4.1",
+     "express": "^4.15.4",
+     "node-schedule": "^1.3.0",
+     "querystring": "^0.2.0",
+     "request": "^2.81.0"
+  
     
 # What next?
 
