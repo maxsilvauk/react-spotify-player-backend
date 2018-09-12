@@ -1,6 +1,6 @@
 // Media controller - Server
-// Version: 1.01
-// Forked from:    and modified with added features
+// Version: 1.2
+// Forked from:  https://github.com/mpj/oauth-bridge-template  and modified with added features
 let express = require('express')
 let bodyParser = require('body-parser')
 let request = require('request')
@@ -29,10 +29,10 @@ app.use(bodyParser.json());
 const serverAddr = 'http://YOUR_DOMAIN';  // no slash at the end!
 var SPOTIFY_CLIENT_ID = 'ENTER_YOUR_ID';
 var SPOTIFY_CLIENT_SECRET = 'ENTER_YOUR_SECRET';
+let afterLoginURI = "http://ENTER_YOUR_DOMAIN/success";
 let access_token = ""; // Keeps valid token in memory
 let refresh_token = ""; // known as permanent token which does not expire 
-let expires_in = 3600;
-let loginInitiated = false;
+let loginInitiated = false; 
 
 let redirect_uri =
   process.env.REDIRECT_URI ||
@@ -45,7 +45,7 @@ app.get('/login', function (req, res) {
       response_type: 'code',
       // client_id: process.env.SPOTIFY_CLIENT_ID, //9c70f9f7efbc41e59d8dd35c66d0131b  
       client_id: SPOTIFY_CLIENT_ID,
-      scope: 'user-read-currently-playing user-modify-playback-state user-read-private user-read-email',
+      scope: 'user-read-playback-state user-read-currently-playing user-modify-playback-state user-read-private user-read-email',
       redirect_uri
     }))
 })
@@ -77,11 +77,21 @@ app.get('/callback', function (req, res) {
     // let uri = process.env.FRONTEND_URI || serverAddr + ':3000'
     // res.redirect(uri + '?access_token=' + access_token)  
 
-    res.json({
-      "access token": access_token,
-      "refresh token": refresh_token,
-      "expires in": expires_in
-    });
+    // show tokens to client side. CAUTION! - enable only if you debugging application. Tokes are private
+    // res.json({
+    //   "access token": access_token,
+    //   "refresh token": refresh_token,
+    //   "expires in": expires_in
+    // });
+    // redirect if URL is defined in setting
+     if(afterLoginURI !== "") {
+        res.redirect(afterLoginURI);
+     } else {
+        res.json({
+        "granted": "yes"
+        });
+     }
+   
 
     loginInitiated = true; // enables timer for Token refresh
     // res.json({ "login success": "yes" });
@@ -116,13 +126,17 @@ function funcRefreshToken() {
 //######## JSON GET - receives commands from client App
 app.post('/komande', function (req, res) {
   if (loginInitiated) {
-    console.log("Request:" + req.body.komanda + "   Method: " + req.body.tip); // show received JSON data in terminal
+    // console.log("Request:" + req.body.komanda + "   Method: " + req.body.tip + "    Value: " + req.body.value); // show received JSON data in terminal
+    let command = req.body.komanda;
+    if (command === "volume?volume_percent") {
+      command = command + "=" + req.body.value;
+    }
     // res.send({ "login": "Please login to Spotify first" });    // echo the result back to sender - uncomment if you want to listen responses on client side
     var options = {
       method: req.body.tip, //PUT, POST, GET..
-      url: 'https://api.spotify.com/v1/me/player/' + req.body.komanda,
+      url: 'https://api.spotify.com/v1/me/player/' + command,
       headers: {
-        scope: 'user-read-currently-playing user-modify-playback-state user-read-private user-read-email', // extend list if you need more options
+        scope: 'user-read-playback-state user-read-currently-playing user-modify-playback-state user-read-private user-read-email', // extend list if you need more options
         authorization: 'Bearer ' + access_token,
         'content-type': 'application/json'
       },
@@ -132,10 +146,11 @@ app.post('/komande', function (req, res) {
     request(options, function (error, response, body) {
       if (error) throw new Error(error);
       // display console output for What is playing or Volume change etc.
-      if (req.body.komanda !== "currently-playing") {
+      if (command !== "") { // MOD: currently-playing removed
         console.log(body);        
       }
       res.json(body);
+       
       //###################################################################
       // res.setHeader('Content-Type', 'application/json');
       // res.json(JSON.stringify({ login: "Please login to Spotify first" }, null, 3));
