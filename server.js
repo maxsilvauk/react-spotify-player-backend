@@ -1,6 +1,7 @@
 // Media controller - Server
 // Version: 1.2
 // Forked from:  https://github.com/mpj/oauth-bridge-template  and modified with added features
+require("dotenv").config();
 let express = require('express')
 let bodyParser = require('body-parser')
 let request = require('request')
@@ -27,8 +28,8 @@ let app = express()
 app.use(bodyParser.json());
 // CONFIG
 const serverAddr = 'https://react-spotify-player-backend.herokuapp.com'; // no slash at the end!
-var SPOTIFY_CLIENT_ID = 'ff2bd7c39fd44ade821f290f8fa5ba6c';
-var SPOTIFY_CLIENT_SECRET = '062ce33b2c5541ebba2a81ffb0bc12f7';
+var SPOTIFY_CLIENT_ID = '';
+var SPOTIFY_CLIENT_SECRET = '';
 let afterLoginURI = "https://react-spotify-player-frontend.herokuapp.com/login";
 let access_token = ""; // Keeps valid token in memory
 let refresh_token = ""; // known as permanent token which does not expire 
@@ -60,8 +61,8 @@ app.get('/callback', function (req, res) {
     },
     headers: {
       'Authorization': 'Basic ' + (new Buffer( 
-        // process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET // uncomment if you want to use local Linux storage for secrets
-        SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET // comment this if you using lines above
+        process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET // uncomment if you want to use local Linux storage for secrets
+        // SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET // comment this if you using lines above
       ).toString('base64'))
     },
     json: true
@@ -84,7 +85,6 @@ app.get('/callback', function (req, res) {
     // });
     // redirect if URL is defined in setting
      if(afterLoginURI !== "") {
-        console.log(`we get here ${access_token}`)
         res.redirect(afterLoginURI + '?access_token=' + access_token);
      } else {
         res.json({
