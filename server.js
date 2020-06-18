@@ -27,10 +27,7 @@ let app = express()
 // parse JSON
 app.use(bodyParser.json());
 // CONFIG
-const serverAddr = 'https://react-spotify-player-backend.herokuapp.com'; // no slash at the end!
-var SPOTIFY_CLIENT_ID = '';
-var SPOTIFY_CLIENT_SECRET = '';
-let afterLoginURI = "https://react-spotify-player-frontend.herokuapp.com/login";
+const serverAddr = 'https://react-spotify-player-backend.herokuapp.com';
 let access_token = ""; // Keeps valid token in memory
 let refresh_token = ""; // known as permanent token which does not expire 
 let loginInitiated = false;
@@ -41,16 +38,13 @@ let redirect_uri =
 
 
 app.get('/login', function (req, res) {
-  res.redirect(
-    "https://accounts.spotify.com/authorize?" +
-      querystring.stringify({
-        response_type: "code",
-        client_id: process.env.SPOTIFY_CLIENT_ID,
-        scope:
-          "user-read-playback-state user-read-currently-playing user-modify-playback-state user-read-private user-read-email",
-        redirect_uri,
-      })
-  );
+  res.redirect('https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code', 
+      client_id: process.env.SPOTIFY_CLIENT_ID,
+      scope: 'user-read-playback-state user-read-currently-playing user-modify-playback-state user-read-private user-read-email',
+      redirect_uri
+    }))
 })
 
 app.get('/callback', function (req, res) {
@@ -87,12 +81,12 @@ app.get('/callback', function (req, res) {
     //   "expires in": expires_in
     // });
     // redirect if URL is defined in setting
-     if(afterLoginURI !== "") {
-        res.redirect(afterLoginURI + '?access_token=' + access_token);
+     if (process.env.FRONTEND_URI !== "") {
+       res.redirect(process.env.FRONTEND_URI + "?access_token=" + access_token);
      } else {
-        res.json({
-        "granted": "yes"
-        });
+       res.json({
+         granted: "yes",
+       });
      }
     loginInitiated = true; // enables timer for Token refresh
     // res.json({ "login success": "yes" });
