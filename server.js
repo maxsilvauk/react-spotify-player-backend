@@ -27,7 +27,10 @@ let app = express()
 // parse JSON
 app.use(bodyParser.json());
 // CONFIG
-const serverAddr = 'https://react-spotify-player-backend.herokuapp.com';
+const serverAddr = 'https://react-spotify-player-backend.herokuapp.com'; // no slash at the end!
+var SPOTIFY_CLIENT_ID = '';
+var SPOTIFY_CLIENT_SECRET = '';
+let afterLoginURI = "https://react-spotify-player-frontend.herokuapp.com/login";
 let access_token = ""; // Keeps valid token in memory
 let refresh_token = ""; // known as permanent token which does not expire 
 let loginInitiated = false;
@@ -82,7 +85,7 @@ app.get('/callback', function (req, res) {
     // });
     // redirect if URL is defined in setting
      if (process.env.FRONTEND_URI !== "") {
-       res.redirect(process.env.FRONTEND_URI + "?access_token=" + access_token);
+       res.redirect(afterLoginURI + "?access_token=" + access_token);
      } else {
        res.json({
          granted: "yes",
