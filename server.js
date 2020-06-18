@@ -26,10 +26,10 @@ let app = express()
 // parse JSON
 app.use(bodyParser.json());
 // CONFIG
-const serverAddr = 'http://YOUR_DOMAIN';  // no slash at the end!
-var SPOTIFY_CLIENT_ID = 'ENTER_YOUR_ID';
-var SPOTIFY_CLIENT_SECRET = 'ENTER_YOUR_SECRET';
-let afterLoginURI = "http://ENTER_YOUR_DOMAIN/success";
+const serverAddr = 'http://react-spotify-player-backend.herokuapp.com'; // no slash at the end!
+var SPOTIFY_CLIENT_ID = 'ff2bd7c39fd44ade821f290f8fa5ba6c';
+var SPOTIFY_CLIENT_SECRET = '062ce33b2c5541ebba2a81ffb0bc12f7';
+let afterLoginURI = "http://react-spotify-player-frontend.herokuapp.com/login";
 let access_token = ""; // Keeps valid token in memory
 let refresh_token = ""; // known as permanent token which does not expire 
 let loginInitiated = false; 
