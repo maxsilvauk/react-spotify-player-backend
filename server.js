@@ -26,13 +26,13 @@ let app = express()
 // parse JSON
 app.use(bodyParser.json());
 // CONFIG
-const serverAddr = 'http://react-spotify-player-backend.herokuapp.com'; // no slash at the end!
+const serverAddr = 'http://localhost'; // no slash at the end!
 var SPOTIFY_CLIENT_ID = 'ff2bd7c39fd44ade821f290f8fa5ba6c';
 var SPOTIFY_CLIENT_SECRET = '062ce33b2c5541ebba2a81ffb0bc12f7';
-let afterLoginURI = "http://react-spotify-player-frontend.herokuapp.com/login";
+let afterLoginURI = "http://localhost:8080/login";
 let access_token = ""; // Keeps valid token in memory
 let refresh_token = ""; // known as permanent token which does not expire 
-let loginInitiated = false; 
+let loginInitiated = false;
 
 let redirect_uri =
   process.env.REDIRECT_URI ||
@@ -84,14 +84,13 @@ app.get('/callback', function (req, res) {
     // });
     // redirect if URL is defined in setting
      if(afterLoginURI !== "") {
-        res.redirect(afterLoginURI);
+        console.log(`we get here ${access_token}`)
+        res.redirect(afterLoginURI + '?access_token=' + access_token);
      } else {
         res.json({
         "granted": "yes"
         });
      }
-   
-
     loginInitiated = true; // enables timer for Token refresh
     // res.json({ "login success": "yes" });
   })
@@ -233,5 +232,5 @@ app.post('/komande', function (req, res) {
 
 // Server serve settings
 let port = process.env.PORT || 8888
-console.log(`Listening on port ${port}. Go to ${serverAddr}/login to initiate authentication flow.`)
+console.log(`Listening on port ${port}. Go to ${serverAddr}:${port}/login to initiate authentication flow.`)
 app.listen(port)
