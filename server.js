@@ -41,13 +41,16 @@ let redirect_uri =
 
 
 app.get('/login', function (req, res) {
-  res.redirect('https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
-      response_type: 'code', 
-      client_id: SPOTIFY_CLIENT_ID,
-      scope: 'user-read-playback-state user-read-currently-playing user-modify-playback-state user-read-private user-read-email',
-      redirect_uri
-    }))
+  res.redirect(
+    "https://accounts.spotify.com/authorize?" +
+      querystring.stringify({
+        response_type: "code",
+        client_id: process.env.SPOTIFY_CLIENT_ID,
+        scope:
+          "user-read-playback-state user-read-currently-playing user-modify-playback-state user-read-private user-read-email",
+        redirect_uri,
+      })
+  );
 })
 
 app.get('/callback', function (req, res) {
