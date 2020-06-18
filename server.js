@@ -28,12 +28,15 @@ let app = express()
 app.use(bodyParser.json());
 // CONFIG
 const serverAddr = 'https://react-spotify-player-backend.herokuapp.com'; // no slash at the end!
-let afterLoginURI = process.env.FRONTEND_URI;
+var SPOTIFY_CLIENT_ID = '';
+var SPOTIFY_CLIENT_SECRET = '';
+let afterLoginURI = "https://react-spotify-player-frontend.herokuapp.com/login";
 let access_token = ""; // Keeps valid token in memory
 let refresh_token = ""; // known as permanent token which does not expire 
 let loginInitiated = false;
 
 let redirect_uri = process.env.REDIRECT_URI
+
 
 app.get('/login', function (req, res) {
   res.redirect('https://accounts.spotify.com/authorize?' +
@@ -56,7 +59,8 @@ app.get('/callback', function (req, res) {
     },
     headers: {
       'Authorization': 'Basic ' + (new Buffer( 
-        process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET
+        process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET // uncomment if you want to use local Linux storage for secrets
+        // SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET // comment this if you using lines above
       ).toString('base64'))
     },
     json: true
